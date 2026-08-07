@@ -1,0 +1,196 @@
+local v0 = game:GetService("Players")
+local v1 = game:GetService("TweenService")
+local v2 = v0.LocalPlayer
+local v3 = v2:WaitForChild("PlayerGui")
+local v4 = "https://api.jnkie.com/api/v1/luascripts/public/807fa54e30df8fdea31b78ae1f835751b415432daa9fee1a796e7b1355964909/download"
+local v5 = loadstring(game:HttpGet("https://jnkie.com/sdk/library.lua"))()
+v5.service = "AtackXi"
+v5.identifier = "1157920"
+v5.provider = "AtackProv"
+
+-- Создание GUI
+local v9 = Instance.new("ScreenGui")
+v9.Name = "SelegendsScripts"
+v9.IgnoreGuiInset = true
+v9.ResetOnSpawn = false
+v9.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+pcall(function() 
+    v9.Parent = game:GetService("CoreGui") 
+end)
+if not v9.Parent then 
+    v9.Parent = v3 
+end
+
+-- Основной фрейм
+local v15 = Instance.new("Frame")
+v15.Size = UDim2.new(0, 360, 0, 150)
+v15.Position = UDim2.new(0.5, -180, 0.5, -75)
+v15.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+v15.BackgroundTransparency = 0
+v15.BorderSizePixel = 0
+v15.ClipsDescendants = true
+v15.Parent = v9
+
+local v23 = Instance.new("UICorner")
+v23.CornerRadius = UDim.new(0, 12)
+v23.Parent = v15
+
+local v26 = Instance.new("UIStroke")
+v26.Color = Color3.fromRGB(255, 255, 255)
+v26.Thickness = 1
+v26.Transparency = 0.4
+v26.Parent = v15
+
+-- Градиент
+local v31 = Instance.new("Frame")
+v31.Size = UDim2.new(1, 0, 1, 0)
+v31.BackgroundTransparency = 1
+v31.BorderSizePixel = 0
+v31.ZIndex = 5
+v31.Parent = v15
+
+local v37 = Instance.new("UIGradient")
+v37.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255))
+v37.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 1),
+    NumberSequenceKeypoint.new(0.5, 0),
+    NumberSequenceKeypoint.new(1, 1)
+})
+v37.Rotation = 90
+v37.Parent = v31
+
+-- Анимация градиента
+task.spawn(function()
+    while true do
+        v26.Transparency = 0.4 + (0.3 * math.sin(tick() * 3))
+        task.wait()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        local tween = v1:Create(v37, TweenInfo.new(1.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
+            Offset = Vector2.new(2, 0)
+        })
+        tween:Play()
+        tween.Completed:Wait()
+        task.wait(1.2)
+    end
+end)
+
+-- Логотип
+local v43 = Instance.new("ImageLabel")
+v43.Size = UDim2.new(0, 18, 0, 18)
+v43.Position = UDim2.new(0, 12, 0, 9)
+v43.BackgroundTransparency = 1
+v43.Image = "rbxassetid://10723396107"
+v43.ImageColor3 = Color3.fromRGB(224, 224, 224)
+v43.Parent = v15
+
+-- Заголовок
+local v50 = Instance.new("TextLabel")
+v50.Size = UDim2.new(0, 60, 0, 20)
+v50.Position = UDim2.new(0, 35, 0, 6)
+v50.BackgroundTransparency = 1
+v50.Text = "Selegends"
+v50.Font = Enum.Font.GothamBold
+v50.TextSize = 16
+v50.TextColor3 = Color3.fromRGB(255, 255, 255)
+v50.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+v50.TextStrokeTransparency = 0.7
+v50.TextXAlignment = Enum.TextXAlignment.Left
+v50.Parent = v15
+
+-- Кнопки
+local function CreateButton(text, x, width)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, width, 0, 32)
+    button.Position = UDim2.new(0, x, 0, 50)
+    button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    button.BorderSizePixel = 0
+    button.Text = text
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 14
+    button.AutoButtonColor = false
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 6)
+    corner.Parent = button
+    
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(100, 100, 255)
+    stroke.Thickness = 1
+    stroke.Transparency = 0.5
+    stroke.Parent = button
+    
+    button.Parent = v15
+    return button
+end
+
+local v83 = CreateButton("Загрузить скрипт", 12, 150)
+local v84 = CreateButton("Закрыть", 175, 80)
+
+-- Информационный текст
+local v85 = Instance.new("TextLabel")
+v85.Size = UDim2.new(1, -24, 0, 20)
+v85.Position = UDim2.new(0, 12, 0, 95)
+v85.BackgroundTransparency = 1
+v85.Text = "Нажми «Загрузить скрипт» для активации"
+v85.Font = Enum.Font.Gotham
+v85.TextSize = 12
+v85.TextColor3 = Color3.fromRGB(200, 200, 200)
+v85.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+v85.TextStrokeTransparency = 0.4
+v85.TextXAlignment = Enum.TextXAlignment.Center
+v85.TextWrapped = true
+v85.Parent = v15
+
+-- Функция загрузки скрипта
+local function LoadScript()
+    v83.Text = "Загрузка..."
+    v85.Text = "Загрузка скрипта..."
+    
+    task.spawn(function()
+        local success, result = pcall(function()
+            return game:HttpGet(v4)
+        end)
+        
+        if not success then
+            v85.Text = "Ошибка загрузки: " .. tostring(result)
+            v83.Text = "Загрузить скрипт"
+            return
+        end
+        
+        local scriptContent = result
+        v85.Text = "Компиляция скрипта..."
+        
+        local compiled, err = loadstring(scriptContent)
+        if not compiled then
+            v85.Text = "Ошибка компиляции: " .. tostring(err)
+            v83.Text = "Загрузить скрипт"
+            return
+        end
+        
+        v85.Text = "Запуск скрипта..."
+        
+        local execSuccess, execErr = pcall(compiled)
+        if not execSuccess then
+            v85.Text = "Ошибка выполнения: " .. tostring(execErr)
+            v83.Text = "Загрузить скрипт"
+            return
+        end
+        
+        v85.Text = "Скрипт успешно загружен!"
+        v83.Text = "Готово"
+        task.wait(1)
+        v9:Destroy()
+    end)
+end
+
+-- Обработчики кнопок
+v83.MouseButton1Click:Connect(LoadScript)
+
+v84.MouseButton1Click:Connect(function()
+    v9:Destroy()
+end)
